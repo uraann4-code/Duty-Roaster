@@ -84,24 +84,24 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     setCompletionNoteInput('');
   };
 
-  // Determine card border & background highlight according to Bento theme
+  // Determine card border & background highlight according to Light Bento theme
   const getCardStyle = () => {
     if (item.status === 'completed') {
-      return 'bg-slate-900/60 border border-slate-800 border-l-4 border-l-slate-700 opacity-60';
+      return 'bg-slate-50/80 border border-slate-200 border-l-4 border-l-slate-400 opacity-75';
     }
     if (overdue) {
-      return 'bg-slate-900/90 border border-slate-800 border-l-4 border-l-red-500 shadow-md ring-1 ring-red-500/30';
+      return 'bg-red-50/40 border border-red-200 border-l-4 border-l-red-500 shadow-xs ring-1 ring-red-500/20';
     }
     if (isUrgent && isPending) {
-      return 'bg-slate-900/90 border border-slate-800 border-l-4 border-l-orange-500 shadow-md';
+      return 'bg-amber-50/40 border border-amber-200 border-l-4 border-l-amber-500 shadow-xs';
     }
     if (item.isHighlightedAsSirDirective && isPending) {
-      return 'bg-slate-900/90 border border-slate-800 border-l-4 border-l-orange-400 shadow-sm';
+      return 'bg-orange-50/30 border border-orange-200 border-l-4 border-l-orange-500 shadow-xs';
     }
     if (item.status === 'in_progress') {
-      return 'bg-slate-900/90 border border-slate-800 border-l-4 border-l-yellow-500 shadow-sm';
+      return 'bg-yellow-50/30 border border-yellow-200 border-l-4 border-l-yellow-500 shadow-xs';
     }
-    return 'bg-slate-900/80 border border-slate-800 border-l-4 border-l-blue-500 hover:border-slate-700 shadow-xs';
+    return 'bg-white border border-slate-200 border-l-4 border-l-blue-500 hover:border-slate-300 shadow-xs';
   };
 
   return (
@@ -110,28 +110,28 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       className={`rounded-2xl p-4 sm:p-5 transition-all duration-200 ${getCardStyle()}`}
     >
       {/* Top Meta Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800/80">
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
         <div className="flex flex-wrap items-center gap-1.5 text-xs">
           {/* Priority / Type tag */}
           {item.status === 'completed' ? (
-            <p className="text-xs text-slate-400 font-bold uppercase tracking-wide">COMPLETED</p>
+            <p className="text-xs text-slate-500 font-bold uppercase tracking-wide">COMPLETED</p>
           ) : isUrgent ? (
-            <p className="text-xs text-orange-400 font-bold uppercase tracking-wide">HIGH PRIORITY - PENDING</p>
+            <p className="text-xs text-amber-700 font-bold uppercase tracking-wide">HIGH PRIORITY - PENDING</p>
           ) : item.status === 'in_progress' ? (
-            <p className="text-xs text-yellow-400 font-bold uppercase tracking-wide">IN PROGRESS</p>
+            <p className="text-xs text-yellow-700 font-bold uppercase tracking-wide">IN PROGRESS</p>
           ) : (
-            <p className="text-xs text-blue-400 font-bold uppercase tracking-wide">ROUTINE - PENDING</p>
+            <p className="text-xs text-blue-700 font-bold uppercase tracking-wide">ROUTINE - PENDING</p>
           )}
 
           {/* Reference / Diary Badge */}
-          <span className="font-mono-ref text-[11px] bg-slate-950 text-slate-400 px-2 py-0.5 rounded border border-slate-800 font-medium">
+          <span className="font-mono-ref text-[11px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded border border-slate-200 font-medium">
             {item.referenceNo}
           </span>
 
           {/* Sir Directive Tag */}
           {item.isHighlightedAsSirDirective && isPending && (
-            <span className="bg-orange-500/10 text-orange-300 border border-orange-500/20 text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1">
-              <Crown className="w-3 h-3 text-orange-400" />
+            <span className="bg-orange-100 text-orange-800 border border-orange-200 text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1">
+              <Crown className="w-3 h-3 text-orange-600" />
               SIR DIRECTIVE
             </span>
           )}
@@ -140,24 +140,24 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         {/* Status Indicator Pill */}
         <div className="flex items-center space-x-2">
           {item.status === 'completed' ? (
-            <span className="px-2.5 py-1 bg-slate-800 text-slate-300 rounded text-[10px] font-bold border border-slate-700">
+            <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded text-[10px] font-bold border border-slate-200">
               ARCHIVED
             </span>
           ) : overdue ? (
-            <span className="px-2.5 py-1 bg-red-500/10 text-red-400 rounded text-[10px] font-bold border border-red-500/30 animate-pulse flex items-center gap-1">
-              <AlertTriangle className="w-3 h-3" />
+            <span className="px-2.5 py-1 bg-red-100 text-red-700 rounded text-[10px] font-bold border border-red-200 animate-pulse flex items-center gap-1">
+              <AlertTriangle className="w-3 h-3 text-red-600" />
               OVERDUE
             </span>
           ) : isUrgent ? (
-            <span className="px-2.5 py-1 bg-orange-500/10 text-orange-400 rounded text-[10px] font-bold border border-orange-500/20">
+            <span className="px-2.5 py-1 bg-amber-100 text-amber-800 rounded text-[10px] font-bold border border-amber-200">
               REQUIRED TODAY
             </span>
           ) : item.status === 'in_progress' ? (
-            <span className="px-2.5 py-1 bg-yellow-500/10 text-yellow-400 rounded text-[10px] font-bold border border-yellow-500/20">
+            <span className="px-2.5 py-1 bg-yellow-100 text-yellow-800 rounded text-[10px] font-bold border border-yellow-200">
               IN PROGRESS
             </span>
           ) : (
-            <span className="px-2.5 py-1 bg-blue-500/10 text-blue-400 rounded text-[10px] font-bold border border-blue-500/20">
+            <span className="px-2.5 py-1 bg-blue-50 text-blue-700 rounded text-[10px] font-bold border border-blue-200">
               ACTIVE DESK
             </span>
           )}
@@ -167,62 +167,62 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       {/* Main Body */}
       <div className="pt-3 pb-2 space-y-2">
         {/* Title */}
-        <h3 className={`text-base font-semibold text-slate-100 leading-snug ${item.status === 'completed' ? 'line-through text-slate-400' : ''}`}>
+        <h3 className={`text-base font-bold text-slate-900 leading-snug ${item.status === 'completed' ? 'line-through text-slate-400' : ''}`}>
           {item.title}
         </h3>
 
-        <p className="text-xs text-slate-400">
-          Assigned by <span className="text-slate-300 font-medium">{item.assignedBy}</span> ({formatTimeDisplay(item.dueTime)})
+        <p className="text-xs text-slate-500">
+          Assigned by <span className="text-slate-800 font-semibold">{item.assignedBy}</span> ({formatTimeDisplay(item.dueTime)})
         </p>
 
         {/* Action Required Callout */}
         {item.actionRequired && (
-          <div className="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-xs text-slate-300">
-            <span className="font-bold text-orange-400 uppercase text-[10px] block tracking-wide">
+          <div className="bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-xs text-slate-700">
+            <span className="font-bold text-orange-700 uppercase text-[10px] block tracking-wide">
               Action Required / Output:
             </span>
-            <p className="font-normal text-slate-200 mt-0.5">{item.actionRequired}</p>
+            <p className="font-medium text-slate-900 mt-0.5">{item.actionRequired}</p>
           </div>
         )}
 
         {/* Meeting Venue or Dak Source */}
         {item.locationOrVenue && (
-          <div className="flex items-center space-x-1.5 text-xs text-blue-300 bg-blue-950/40 px-2.5 py-1.5 rounded-lg border border-blue-900/50">
-            <MapPin className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-            <span className="font-semibold text-blue-200">Venue:</span>
+          <div className="flex items-center space-x-1.5 text-xs text-blue-800 bg-blue-50 px-2.5 py-1.5 rounded-lg border border-blue-200">
+            <MapPin className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+            <span className="font-bold text-blue-900">Venue:</span>
             <span>{item.locationOrVenue}</span>
           </div>
         )}
 
         {item.correspondenceSource && (
-          <div className="flex items-center space-x-1.5 text-xs text-amber-300 bg-amber-950/30 px-2.5 py-1.5 rounded-lg border border-amber-900/40">
-            <Building className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span className="font-semibold text-amber-200">Source / Ministry:</span>
+          <div className="flex items-center space-x-1.5 text-xs text-amber-800 bg-amber-50 px-2.5 py-1.5 rounded-lg border border-amber-200">
+            <Building className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+            <span className="font-bold text-amber-900">Source / Ministry:</span>
             <span>{item.correspondenceSource}</span>
           </div>
         )}
 
         {/* Instructions / Description (if expanded or short) */}
         {item.description && (
-          <p className={`text-xs text-slate-400 leading-relaxed ${isExpanded ? '' : 'line-clamp-2'}`}>
+          <p className={`text-xs text-slate-600 leading-relaxed ${isExpanded ? '' : 'line-clamp-2'}`}>
             {item.description}
           </p>
         )}
 
         {/* Checklist preview or full checklist */}
         {totalCheckCount > 0 && (
-          <div className="mt-2 pt-2 border-t border-slate-800/80">
-            <div className="flex items-center justify-between text-xs text-slate-300 mb-1.5">
-              <span className="font-semibold flex items-center gap-1.5">
+          <div className="mt-2 pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-between text-xs text-slate-700 mb-1.5">
+              <span className="font-bold flex items-center gap-1.5">
                 <span>Checklist:</span>
-                <span className="text-[10px] font-bold text-indigo-300 bg-indigo-950/80 border border-indigo-800 px-1.5 py-0.2 rounded">
+                <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-1.5 py-0.2 rounded">
                   {completedCheckCount} / {totalCheckCount}
                 </span>
               </span>
               <button
                 type="button"
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="text-slate-400 hover:text-slate-200 flex items-center gap-0.5 text-xs cursor-pointer"
+                className="text-slate-500 hover:text-slate-800 flex items-center gap-0.5 text-xs cursor-pointer font-medium"
               >
                 {isExpanded ? (
                   <><span>Hide Steps</span> <ChevronUp className="w-3.5 h-3.5" /></>
@@ -239,13 +239,13 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                   key={check.id}
                   type="button"
                   onClick={() => onToggleChecklist(item.id, check.id)}
-                  className="w-full flex items-center space-x-2 text-left p-1.5 rounded-lg hover:bg-slate-800/60 transition-colors text-xs cursor-pointer"
+                  className="w-full flex items-center space-x-2 text-left p-1.5 rounded-lg hover:bg-slate-100/70 transition-colors text-xs cursor-pointer"
                 >
                   <div
                     className={`w-3.5 h-3.5 rounded border flex items-center justify-center shrink-0 ${
                       check.completed
-                        ? 'bg-emerald-600 border-emerald-500 text-white'
-                        : 'border-slate-700 bg-slate-950'
+                        ? 'bg-emerald-600 border-emerald-600 text-white'
+                        : 'border-slate-300 bg-white'
                     }`}
                   >
                     {check.completed && <Check className="w-2.5 h-2.5 stroke-[3]" />}
@@ -253,8 +253,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                   <span
                     className={
                       check.completed
-                        ? 'line-through text-slate-500 font-normal'
-                        : 'text-slate-300 font-medium'
+                        ? 'line-through text-slate-400 font-normal'
+                        : 'text-slate-700 font-medium'
                     }
                   >
                     {check.text}
@@ -265,7 +265,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsExpanded(true)}
-                  className="text-[11px] text-indigo-400 hover:text-indigo-300 pt-0.5 font-medium block cursor-pointer"
+                  className="text-[11px] text-indigo-600 hover:text-indigo-700 pt-0.5 font-bold block cursor-pointer"
                 >
                   + {totalCheckCount - 2} more steps...
                 </button>
@@ -276,22 +276,22 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
         {/* Completion details if completed */}
         {item.status === 'completed' && item.completionNotes && (
-          <div className="bg-emerald-950/30 border border-emerald-900/50 rounded-lg p-2 text-xs text-emerald-300 mt-2">
-            <span className="font-bold text-emerald-200">Disposal Remarks:</span> {item.completionNotes}
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-xs text-emerald-800 mt-2">
+            <span className="font-bold text-emerald-900">Disposal Remarks:</span> {item.completionNotes}
           </div>
         )}
       </div>
 
       {/* Footer Details: Assigned By, Due Date/Time, Action Buttons */}
-      <div className="pt-3 mt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-xs">
-        <div className="flex flex-wrap items-center gap-3 text-slate-400">
+      <div className="pt-3 mt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div className="flex flex-wrap items-center gap-3 text-slate-500">
           <div className="flex items-center space-x-1 font-medium">
-            <Calendar className="w-3.5 h-3.5 text-slate-500" />
-            <span className={dueToday ? 'text-indigo-300 font-bold' : overdue ? 'text-red-400 font-bold' : 'text-slate-300'}>
+            <Calendar className="w-3.5 h-3.5 text-slate-400" />
+            <span className={dueToday ? 'text-indigo-700 font-bold' : overdue ? 'text-red-600 font-bold' : 'text-slate-600'}>
               {formatDateDisplay(item.dueDate)}
             </span>
-            <span className="text-slate-500">at</span>
-            <span className="font-bold text-slate-200">
+            <span className="text-slate-400">at</span>
+            <span className="font-bold text-slate-800">
               {formatTimeDisplay(item.dueTime)}
             </span>
           </div>
@@ -305,14 +305,14 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               <button
                 onClick={() => onStatusChange(item.id, 'in_progress')}
                 title="Mark In Progress"
-                className="px-2 py-1 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 rounded-lg font-semibold text-xs transition-colors cursor-pointer"
+                className="px-2 py-1 bg-yellow-50 hover:bg-yellow-100 text-yellow-800 border border-yellow-200 rounded-lg font-bold text-xs transition-colors cursor-pointer"
               >
                 In Progress
               </button>
               <button
                 onClick={() => setShowCompleteModal(true)}
                 title="Mark Completed / Disposed"
-                className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-xs flex items-center gap-1 transition-colors cursor-pointer"
+                className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-xs flex items-center gap-1 transition-colors cursor-pointer shadow-2xs"
               >
                 <Check className="w-3.5 h-3.5" />
                 <span>Dispose</span>
@@ -324,7 +324,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             <button
               onClick={() => setShowCompleteModal(true)}
               title="Mark Completed"
-              className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-xs flex items-center gap-1 transition-colors cursor-pointer"
+              className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-xs flex items-center gap-1 transition-colors cursor-pointer shadow-2xs"
             >
               <Check className="w-3.5 h-3.5" />
               <span>Mark Disposed</span>
@@ -335,7 +335,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             <button
               onClick={() => onStatusChange(item.id, 'pending')}
               title="Reopen as Pending"
-              className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg font-semibold text-xs flex items-center gap-1 transition-colors cursor-pointer"
+              className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-lg font-bold text-xs flex items-center gap-1 transition-colors cursor-pointer"
             >
               <RotateCcw className="w-3 h-3" />
               <span>Reopen</span>
@@ -346,7 +346,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           <button
             onClick={() => onEdit(item)}
             title="Edit Item"
-            className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors cursor-pointer border border-slate-800/80"
+            className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer border border-slate-200"
           >
             <Edit3 className="w-3.5 h-3.5" />
           </button>
@@ -359,7 +359,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               }
             }}
             title="Delete Item"
-            className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer border border-slate-800/80"
+            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer border border-slate-200"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>
@@ -368,17 +368,17 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
       {/* Completion Modal Prompt */}
       {showCompleteModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-slate-900 rounded-2xl max-w-md w-full p-5 shadow-2xl border border-slate-800 space-y-4 text-slate-100">
-            <div className="flex items-center space-x-2 text-emerald-400 font-bold">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border border-slate-200 space-y-4 text-slate-900">
+            <div className="flex items-center space-x-2 text-emerald-600 font-bold">
               <CheckCircle2 className="w-5 h-5" />
-              <h4 className="text-base text-white">Mark Official Record as Disposed</h4>
+              <h4 className="text-base text-slate-900">Mark Official Record as Disposed</h4>
             </div>
-            <p className="text-xs text-slate-300">
-              Confirm disposal of: <span className="font-semibold text-white">{item.title}</span>
+            <p className="text-xs text-slate-600">
+              Confirm disposal of: <span className="font-semibold text-slate-900">{item.title}</span>
             </p>
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-slate-700 mb-1">
                 Disposal Remarks / Dispatch Reference:
               </label>
               <textarea
@@ -386,21 +386,21 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                 value={completionNoteInput}
                 onChange={(e) => setCompletionNoteInput(e.target.value)}
                 placeholder="e.g. File signed by Sir and dispatched to Ministry / Minutes issued."
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
               />
             </div>
             <div className="flex items-center justify-end space-x-2 pt-2">
               <button
                 type="button"
                 onClick={() => setShowCompleteModal(false)}
-                className="px-3 py-1.5 text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg"
+                className="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleConfirmComplete}
-                className="px-4 py-1.5 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg shadow-xs"
+                className="px-4 py-1.5 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg shadow-xs cursor-pointer"
               >
                 Confirm Disposal
               </button>

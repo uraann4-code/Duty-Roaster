@@ -86,14 +86,14 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Date Navigation & Actions Toolbar (Hidden during print) */}
-      <div className="no-print bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="no-print bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Date Selector */}
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center space-x-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
+          <div className="flex items-center space-x-1 bg-slate-50 p-1 rounded-xl border border-slate-200">
             <button
               onClick={handlePrevDay}
               title="Previous Day"
-              className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+              className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-200/60 rounded-lg transition-colors cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -103,7 +103,7 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({
               className={`px-3 py-1 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
                 selectedDate === today
                   ? 'bg-emerald-600 text-white shadow-xs'
-                  : 'text-slate-400 hover:text-slate-200'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               Today
@@ -112,25 +112,25 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({
             <button
               onClick={handleNextDay}
               title="Next Day"
-              className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+              className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-200/60 rounded-lg transition-colors cursor-pointer"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
 
           {/* Native Date Input */}
-          <div className="flex items-center space-x-2 bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-200">
-            <CalendarIcon className="w-4 h-4 text-emerald-400" />
+          <div className="flex items-center space-x-2 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-800">
+            <CalendarIcon className="w-4 h-4 text-emerald-600" />
             <input
               type="date"
               id="input-roster-date"
               value={selectedDate}
               onChange={(e) => e.target.value && setSelectedDate(e.target.value)}
-              className="bg-transparent text-slate-100 font-bold focus:outline-none cursor-pointer"
+              className="bg-transparent text-slate-900 font-bold focus:outline-none cursor-pointer"
             />
           </div>
 
-          <span className="text-xs font-bold text-slate-300 bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-xl">
+          <span className="text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl">
             {formatDateDisplay(selectedDate)}
           </span>
         </div>
@@ -138,16 +138,16 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({
         {/* Action Buttons: View Toggle, Add Task, Print PDF */}
         <div className="flex flex-wrap items-center gap-2.5">
           {/* View Mode Toggle */}
-          <div className="bg-slate-950 p-1 rounded-xl border border-slate-800 flex items-center text-xs font-semibold">
+          <div className="bg-slate-100 p-1 rounded-xl border border-slate-200 flex items-center text-xs font-semibold">
             <button
               onClick={() => setViewMode('sheet')}
               className={`px-2.5 py-1 rounded-lg flex items-center gap-1 transition-all cursor-pointer ${
                 viewMode === 'sheet'
-                  ? 'bg-slate-800 text-white shadow-xs font-bold border border-slate-700'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-white text-slate-900 shadow-xs font-bold border border-slate-200'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <FileText className="w-3.5 h-3.5 text-amber-400" />
+              <FileText className="w-3.5 h-3.5 text-amber-600" />
               <span>Print Preview</span>
             </button>
 
@@ -155,11 +155,11 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({
               onClick={() => setViewMode('cards')}
               className={`px-2.5 py-1 rounded-lg flex items-center gap-1 transition-all cursor-pointer ${
                 viewMode === 'cards'
-                  ? 'bg-slate-800 text-white shadow-xs font-bold border border-slate-700'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-white text-slate-900 shadow-xs font-bold border border-slate-200'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <LayoutList className="w-3.5 h-3.5 text-blue-400" />
+              <LayoutList className="w-3.5 h-3.5 text-blue-600" />
               <span>Card Grid</span>
             </button>
           </div>
@@ -167,9 +167,9 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({
           {/* Quick Add for this Date */}
           <button
             onClick={() => onOpenNewTaskForDate(selectedDate)}
-            className="bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 text-xs font-medium px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
           >
-            <PlusCircle className="w-3.5 h-3.5 text-emerald-400" />
+            <PlusCircle className="w-3.5 h-3.5 text-emerald-600" />
             <span>+ Add to {selectedDate === today ? 'Today' : 'Date'}</span>
           </button>
 
@@ -177,7 +177,7 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({
           <button
             id="btn-print-duty-roster"
             onClick={handlePrint}
-            className="bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-medium text-xs px-4 py-2 rounded-lg flex items-center gap-1.5 shadow transition-all cursor-pointer"
+            className="bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
           >
             <Printer className="w-4 h-4" />
             <span>Print Duty Roster (PDF)</span>
@@ -187,7 +187,7 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({
 
       {/* Roster Sheet Preview or Cards View */}
       {viewMode === 'sheet' ? (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6">
+        <div className="bg-slate-100/70 border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-xs">
           {/* Printable Official Sheet */}
           <PrintRosterSheet
             date={selectedDate}
@@ -198,17 +198,17 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({
       ) : (
         <div className="space-y-4">
           {/* Date Summary bar in Card View */}
-          <div className="bg-slate-900 border border-slate-800 text-white p-5 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-xs">
+          <div className="bg-white border border-slate-200 text-slate-900 p-5 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-xs">
             <div>
               <h2 className="text-base font-bold flex items-center gap-2">
                 <span>Duty & Agenda for {formatDateDisplay(selectedDate)}</span>
                 {urgentCount > 0 && (
-                  <span className="bg-orange-500/20 text-orange-400 border border-orange-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                  <span className="bg-orange-50 text-orange-700 border border-orange-200 text-[10px] font-bold px-2 py-0.5 rounded-full">
                     {urgentCount} URGENT
                   </span>
                 )}
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5">
                 {dateItems.length} total assignments • {pendingCount} pending action
               </p>
             </div>
@@ -218,7 +218,7 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({
               <button
                 onClick={() => setFilterType('all')}
                 className={`px-2.5 py-1 rounded-lg font-semibold transition-colors cursor-pointer ${
-                  filterType === 'all' ? 'bg-slate-800 text-white border border-slate-700' : 'bg-slate-950 text-slate-400 hover:text-white'
+                  filterType === 'all' ? 'bg-slate-900 text-white shadow-xs' : 'bg-slate-100 text-slate-600 border border-slate-200 hover:text-slate-900'
                 }`}
               >
                 All ({dateItems.length})
@@ -226,7 +226,7 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({
               <button
                 onClick={() => setFilterType('pending')}
                 className={`px-2.5 py-1 rounded-lg font-semibold transition-colors cursor-pointer ${
-                  filterType === 'pending' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30' : 'bg-slate-950 text-slate-400 hover:text-white'
+                  filterType === 'pending' ? 'bg-orange-500 text-white shadow-xs' : 'bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-100'
                 }`}
               >
                 Pending ({pendingCount})
@@ -234,7 +234,7 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({
               <button
                 onClick={() => setFilterType('directive')}
                 className={`px-2.5 py-1 rounded-lg font-semibold transition-colors cursor-pointer ${
-                  filterType === 'directive' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' : 'bg-slate-950 text-slate-400 hover:text-white'
+                  filterType === 'directive' ? 'bg-orange-500 text-white shadow-xs' : 'bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-100'
                 }`}
               >
                 Directives
@@ -242,7 +242,7 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({
               <button
                 onClick={() => setFilterType('meeting')}
                 className={`px-2.5 py-1 rounded-lg font-semibold transition-colors cursor-pointer ${
-                  filterType === 'meeting' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'bg-slate-950 text-slate-400 hover:text-white'
+                  filterType === 'meeting' ? 'bg-blue-600 text-white shadow-xs' : 'bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100'
                 }`}
               >
                 Meetings
@@ -252,13 +252,13 @@ export const DutyRosterView: React.FC<DutyRosterViewProps> = ({
 
           {/* Cards Grid */}
           {filteredItems.length === 0 ? (
-            <div className="text-center py-12 bg-slate-900 rounded-2xl border border-slate-800 p-6 space-y-3">
-              <p className="text-slate-400 text-sm font-medium">
+            <div className="text-center py-12 bg-white rounded-2xl border border-slate-200 p-6 space-y-3 shadow-xs">
+              <p className="text-slate-500 text-sm font-medium">
                 No items matching filter for {formatDateDisplay(selectedDate)}.
               </p>
               <button
                 onClick={() => onOpenNewTaskForDate(selectedDate)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl cursor-pointer shadow-xs"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>Add First Directive / Dak for this Date</span>
