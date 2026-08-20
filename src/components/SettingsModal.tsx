@@ -133,7 +133,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               type="text"
               value={formData.officeName}
               onChange={(e) => setFormData({ ...formData, officeName: e.target.value })}
-              placeholder="e.g. Executive Office of the Director General"
+              placeholder="e.g. Office of the Head of Examination (HOE)"
               className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus:outline-none"
             />
           </div>
@@ -147,7 +147,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               type="text"
               value={formData.departmentName}
               onChange={(e) => setFormData({ ...formData, departmentName: e.target.value })}
-              placeholder="e.g. Administration & Coordination Wing"
+              placeholder="e.g. Examination & Assessment Directorate"
               className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus:outline-none"
             />
           </div>
@@ -174,7 +174,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 type="text"
                 value={formData.officerTitle}
                 onChange={(e) => setFormData({ ...formData, officerTitle: e.target.value })}
-                placeholder="e.g. Personal Assistant to DG"
+                placeholder="e.g. Personal Assistant to HOE"
                 className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus:outline-none"
               />
             </div>
@@ -183,13 +183,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           {/* Superior Officer Designation */}
           <div>
             <label className="block font-bold text-slate-700 mb-1 uppercase tracking-wider text-[11px]">
-              Boss / Superior Title (e.g. Director General / Worthy Sir)
+              Boss / Superior Title (e.g. Head of Examination (HOE) / Worthy Sir)
             </label>
             <input
               type="text"
               value={formData.superiorTitle}
               onChange={(e) => setFormData({ ...formData, superiorTitle: e.target.value })}
-              placeholder="e.g. Director General / Worthy Sir"
+              placeholder="e.g. Head of Examination (HOE)"
               className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:bg-white focus:border-emerald-500 focus:outline-none"
             />
           </div>

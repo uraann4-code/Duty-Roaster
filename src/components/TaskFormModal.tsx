@@ -37,9 +37,9 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
   const [title, setTitle] = useState('');
   const [type, setType] = useState<TaskType>('directive');
   const [referenceNo, setReferenceNo] = useState('');
-  const [assignedBy, setAssignedBy] = useState(settings.superiorTitle || 'Director General (Sir)');
-  const [assignee, setAssignee] = useState(settings.officerName || 'PA to Sir');
-  const [department, setDepartment] = useState(settings.departmentName || 'Executive Secretariat');
+  const [assignedBy, setAssignedBy] = useState(settings.superiorTitle || 'Head of Examination (HOE)');
+  const [assignee, setAssignee] = useState(settings.officerName || 'PA to HOE');
+  const [department, setDepartment] = useState(settings.departmentName || 'Examination & Assessment Directorate');
   const [dueDate, setDueDate] = useState(today);
   const [dueTime, setDueTime] = useState('14:00');
   const [priority, setPriority] = useState<PriorityLevel>('urgent');
@@ -76,9 +76,9 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
       setTitle('');
       setType('directive');
       generateReference('directive');
-      setAssignedBy(settings.superiorTitle || 'Director General (Sir)');
-      setAssignee(settings.officerName || 'PA to Sir');
-      setDepartment(settings.departmentName || 'Executive Secretariat');
+      setAssignedBy(settings.superiorTitle || 'Head of Examination (HOE)');
+      setAssignee(settings.officerName || 'PA to HOE');
+      setDepartment(settings.departmentName || 'Examination & Assessment Directorate');
       setDueDate(today);
       setDueTime('14:00');
       setPriority('urgent');
@@ -89,8 +89,8 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
       setActionRequired('');
       setIsHighlightedAsSirDirective(true);
       setChecklist([
-        { id: 'c-1', text: 'Obtain relevant background papers & past file history', completed: false },
-        { id: 'c-2', text: 'Put up draft for signature / submit briefing note', completed: false }
+        { id: 'c-1', text: 'Obtain relevant background papers & examination files', completed: false },
+        { id: 'c-2', text: 'Put up draft for HOE signature / submit briefing note', completed: false }
       ]);
     }
   }, [initialItem, isOpen, settings]);
@@ -99,15 +99,15 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     const year = new Date().getFullYear();
     if (selectedType === 'directive') {
-      setReferenceNo(`DIR/SIR/${year}/${randomNum}`);
+      setReferenceNo(`DIR/HOE/${year}/${randomNum}`);
     } else if (selectedType === 'meeting') {
-      setReferenceNo(`MTG/HQ/${year}/${randomNum}`);
+      setReferenceNo(`MTG/EXAM/${year}/${randomNum}`);
     } else if (selectedType === 'correspondence') {
-      setReferenceNo(`DAK/INW/${year}/${randomNum}`);
+      setReferenceNo(`DAK/EXAM/${year}/${randomNum}`);
     } else if (selectedType === 'report') {
-      setReferenceNo(`FILE/SUB/${year}/${randomNum}`);
+      setReferenceNo(`FILE/EXAM/${year}/${randomNum}`);
     } else {
-      setReferenceNo(`FOL/REM/${year}/${randomNum}`);
+      setReferenceNo(`FOL/HOE/${year}/${randomNum}`);
     }
   };
 
@@ -115,27 +115,27 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
     setType(templateType);
     generateReference(templateType);
     if (templateType === 'directive') {
-      setTitle('Sir Directive: ');
-      setAssignedBy(settings.superiorTitle || 'Director General (Sir)');
+      setTitle('HOE Directive: ');
+      setAssignedBy(settings.superiorTitle || 'Head of Examination (HOE)');
       setPriority('urgent');
       setIsHighlightedAsSirDirective(true);
-      setActionRequired('Compliance report / file to be submitted before given time.');
+      setActionRequired('Compliance report / examination file to be submitted before given time.');
       setChecklist([
-        { id: `c-${Date.now()}-1`, text: 'Gather required data / previous approvals', completed: false },
-        { id: `c-${Date.now()}-2`, text: 'Draft official note sheet', completed: false },
-        { id: `c-${Date.now()}-3`, text: 'Submit to Sir for perusal and sign-off', completed: false }
+        { id: `c-${Date.now()}-1`, text: 'Gather required examination data & records', completed: false },
+        { id: `c-${Date.now()}-2`, text: 'Draft official note sheet for HOE approval', completed: false },
+        { id: `c-${Date.now()}-3`, text: 'Submit file to HOE for perusal and sign-off', completed: false }
       ]);
     } else if (templateType === 'meeting') {
-      setTitle('Official Meeting: ');
-      setAssignedBy('Worthy Sir / Calling Officer');
+      setTitle('Examination Committee Meeting: ');
+      setAssignedBy('Head of Examination (HOE) / Worthy Sir');
       setPriority('high');
-      setLocationOrVenue('Committee Room A / Video Link');
+      setLocationOrVenue('HOE Conference Room / Video Link');
       setIsHighlightedAsSirDirective(true);
       setActionRequired('Arrange agenda files, working papers, and record official minutes.');
       setChecklist([
         { id: `c-${Date.now()}-1`, text: 'Send reminder notice & agenda to attendees', completed: false },
         { id: `c-${Date.now()}-2`, text: 'Place file dockets on table 15 min prior', completed: false },
-        { id: `c-${Date.now()}-3`, text: 'Record and prepare draft minutes of meeting', completed: false }
+        { id: `c-${Date.now()}-3`, text: 'Record and prepare draft minutes of meeting for HOE sign-off', completed: false }
       ]);
     } else if (templateType === 'correspondence') {
       setTitle('Official Inward Dak: ');
@@ -321,7 +321,7 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Prepare Briefing Note on Revised Budget / Attend Meeting with DG at 2 PM"
+              placeholder="e.g. Prepare Briefing Note on Exam Centers / Attend Meeting with HOE at 2 PM"
               className="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-emerald-500 focus:outline-none font-semibold text-slate-900 placeholder:text-slate-400"
             />
           </div>
@@ -342,7 +342,7 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
                 }}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:bg-white focus:border-emerald-500 focus:outline-none cursor-pointer"
               >
-                <option value="directive">Boss Directive (Sir's Task)</option>
+                <option value="directive">Boss Directive (HOE / Sir ka Hukam)</option>
                 <option value="meeting">Official Meeting / Session</option>
                 <option value="correspondence">Official Dak / Letter / Memo</option>
                 <option value="report">File Submission / Note Sheet</option>
@@ -406,7 +406,7 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
                 type="text"
                 value={assignedBy}
                 onChange={(e) => setAssignedBy(e.target.value)}
-                placeholder="e.g. Director General (Sir)"
+                placeholder="e.g. Head of Examination (HOE)"
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:bg-white focus:border-emerald-500 focus:outline-none"
               />
             </div>

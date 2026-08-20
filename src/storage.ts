@@ -4,11 +4,11 @@ const STORAGE_KEY = 'official_duty_items_v1';
 const SETTINGS_KEY = 'official_duty_settings_v1';
 
 export const DEFAULT_SETTINGS: UserSettings = {
-  officeName: 'Executive Office & Secretariat',
-  departmentName: 'Administration & Coordination Directorate',
+  officeName: 'Office of the Head of Examination (HOE)',
+  departmentName: 'Examination & Assessment Directorate',
   officerName: 'Mubashir Qayyum',
-  officerTitle: 'Personal Assistant / Executive Coordinator',
-  superiorTitle: 'Director General / Worthy Sir',
+  officerTitle: 'Personal Assistant / Assistant to HOE',
+  superiorTitle: 'Head of Examination (HOE)',
   showUrgentAlerts: true,
 };
 
@@ -80,93 +80,93 @@ export const getSampleInitialItems = (): OfficialItem[] => {
   return [
     {
       id: 'task-101',
-      title: "Draft Briefing Note on Revised Annual Budget Allocation for Sir's Sign-off",
+      title: "Draft Briefing Note on Exam Center Allocation & Supervisory Staff for HOE Sign-off",
       type: 'directive',
-      referenceNo: 'DIR/BUD-2026/089',
-      assignedBy: 'Director General (Sir)',
-      assignee: 'Executive Assistant (Self)',
-      department: 'Finance & Planning Secretariat',
+      referenceNo: 'DIR/HOE-2026/089',
+      assignedBy: 'Head of Examination (HOE)',
+      assignee: 'Personal Assistant (Mubashir)',
+      department: 'Examination & Assessment Directorate',
       dueDate: today,
       dueTime: '11:30',
       priority: 'urgent',
       status: 'pending',
-      description: 'Sir explicitly ordered this morning to prepare a concise 2-page brief highlighting department-wise budget utilization and pending sanctions for the upcoming Ministry coordination meeting.',
-      actionRequired: 'Put up file with comparative summary sheet before 11:30 AM.',
+      description: 'HOE (Sir) ordered this morning to prepare a concise briefing note on final exam centers, supervisory staff allocation, and CCTV monitoring arrangements for the upcoming annual examination.',
+      actionRequired: 'Put up file with center-wise roster sheet to HOE before 11:30 AM.',
       checklist: [
-        { id: 'c1', text: 'Collect latest expenditure sheet from Accounts Officer', completed: true },
-        { id: 'c2', text: 'Draft 2-page executive summary in official format', completed: false },
-        { id: 'c3', text: 'Flag relevant Annexures A & B for Sir signature', completed: false },
+        { id: 'c1', text: 'Collect center verification list from Secrecy / Conduct Branch', completed: true },
+        { id: 'c2', text: 'Draft 2-page briefing note for HOE perusal', completed: false },
+        { id: 'c3', text: 'Flag relevant Annexures A & B for HOE signature', completed: false },
       ],
       createdDate: new Date(Date.now() - 3600000 * 2).toISOString(),
-      tags: ['Budget', 'Sir Directive', 'Immediate'],
+      tags: ['Examination', 'HOE Directive', 'Immediate'],
       isHighlightedAsSirDirective: true,
     },
     {
       id: 'task-102',
-      title: 'High-Level Coordination & Monthly Progress Review Meeting',
+      title: 'Examination Steering & Result Scrutiny Committee Meeting chaired by HOE',
       type: 'meeting',
-      referenceNo: 'MTG/HQ/2026-AUG/14',
-      assignedBy: 'Worthy Sir / DG',
-      assignee: 'All Section Heads & PA',
-      department: 'Executive Secretariat',
+      referenceNo: 'MTG/EXAM/2026-AUG/14',
+      assignedBy: 'Head of Examination (HOE)',
+      assignee: 'Assistant to HOE & Section Heads',
+      department: 'Office of the Head of Examination',
       dueDate: today,
       dueTime: '14:00',
       priority: 'high',
       status: 'pending',
-      locationOrVenue: 'Main Committee Room (Floor 3) & Video Link',
-      description: 'Monthly review meeting chaired by Worthy Sir. Need to ensure all file presentations, agenda notes, and working papers are placed on the table 15 minutes prior to start.',
-      actionRequired: 'Ensure conference room AV setup, arrange file dockets, record official minutes of meeting.',
+      locationOrVenue: 'HOE Conference Room (Exam Wing) & Video Link',
+      description: 'Critical examination coordination & paper review meeting chaired by Worthy Head of Examination (HOE). Need to ensure all committee files, moderation files, and working sheets are placed on table 15 minutes prior.',
+      actionRequired: 'Ensure conference room AV setup, arrange confidential file folders, record official meeting minutes.',
       checklist: [
-        { id: 'm1', text: 'Circulate final agenda to all Branch In-charges', completed: true },
+        { id: 'm1', text: 'Circulate final agenda to Subject Conveners and Superintendents', completed: true },
         { id: 'm2', text: 'Prepare attendee attendance sheet and recorder notepad', completed: false },
-        { id: 'm3', text: 'Brief Sir 10 minutes prior on key discussion points', completed: false },
+        { id: 'm3', text: 'Brief HOE 10 minutes prior on key agenda points', completed: false },
       ],
       createdDate: new Date(Date.now() - 3600000 * 6).toISOString(),
-      tags: ['Meeting', 'Chaired by Sir', 'Minutes Required'],
+      tags: ['Meeting', 'Chaired by HOE', 'Minutes Required'],
       isHighlightedAsSirDirective: true,
     },
     {
       id: 'task-103',
-      title: 'Official Inward Dak: Ministry Letter regarding National Public Grievance Portal Compliance',
+      title: 'Official Inward Dak: Board / Ministry Letter regarding Examination Security & Paper Printing Protocols',
       type: 'correspondence',
-      referenceNo: 'DAK/INW/9842-F',
-      assignedBy: 'Directorate Receipt & Dispatch',
-      assignee: 'PA / Executive Desk',
-      department: 'Public Affairs & Grievances',
+      referenceNo: 'DAK/EXAM/9842-F',
+      assignedBy: 'Examination Receipt & Dispatch',
+      assignee: 'PA to HOE Desk',
+      department: 'Secrecy & Conduct Wing',
       dueDate: today,
       dueTime: '16:00',
       priority: 'urgent',
       status: 'pending',
-      correspondenceSource: 'Ministry of Federal Coordination (Letter No. 3-8/2026-Coord)',
-      description: 'Incoming urgent letter received via registered courier. Compliance report on 7 pending citizen complaints required before close of business today.',
-      actionRequired: 'Endorse to Section Officer (Admn), get compliance verified, put up draft reply for Sir approval.',
+      correspondenceSource: 'Ministry / Higher Education Board (Confidential Letter)',
+      description: 'Incoming confidential letter regarding standard operating procedures for question paper transport, vault storage, and flying squad protocols. Compliance report required for HOE approval.',
+      actionRequired: 'Endorse to Controller / Superintendent Secrecy, get compliance verified, put up draft reply for HOE approval.',
       checklist: [
-        { id: 'd1', text: 'Diary the inward letter in register & scan copy', completed: true },
-        { id: 'd2', text: 'Obtain status notes from concerned branches', completed: false },
+        { id: 'd1', text: 'Diary the inward letter in Confidential Dak Register', completed: true },
+        { id: 'd2', text: 'Obtain status notes from Secrecy section', completed: false },
         { id: 'd3', text: 'Prepare draft reply letter with endorsement stamp', completed: false },
       ],
       createdDate: new Date(Date.now() - 3600000 * 4).toISOString(),
-      tags: ['Dak', 'Ministry Letter', 'Compliance'],
+      tags: ['Dak', 'Confidential Letter', 'Compliance'],
       isHighlightedAsSirDirective: false,
     },
     {
       id: 'task-104',
-      title: 'Submit Scrutiny Note & File on Office IT Equipment Procurement',
+      title: 'Submit Scrutiny Note & File on Examination Hall IT Equipment & Biometric Verification',
       type: 'report',
-      referenceNo: 'FILE/PROC/IT-2026/45',
-      assignedBy: 'Director (Operations)',
-      assignee: 'Executive Assistant',
-      department: 'Procurement Wing',
+      referenceNo: 'FILE/EXAM-IT/2026/45',
+      assignedBy: 'Deputy Controller (Exams)',
+      assignee: 'Assistant to HOE',
+      department: 'IT & Examination Logistics',
       dueDate: getDateWithOffset(1),
       dueTime: '12:00',
       priority: 'normal',
       status: 'in_progress',
-      description: 'Tender evaluation committee minutes are signed. Need to compile financial comparative statement and submit file for Sir final sanction.',
-      actionRequired: 'Compile tender evaluation files and verify sanction limits.',
+      description: 'Evaluation committee minutes on biometric attendance machines for exam halls are ready. Need to compile comparative statement and submit file for HOE final approval.',
+      actionRequired: 'Compile evaluation files and put up for HOE approval.',
       checklist: [
-        { id: 'r1', text: 'Attach technical evaluation matrix', completed: true },
+        { id: 'r1', text: 'Attach technical evaluation matrix for biometric devices', completed: true },
         { id: 'r2', text: 'Verify budget allocation availability with Accounts', completed: true },
-        { id: 'r3', text: 'Draft sanction order for Sir signature', completed: false },
+        { id: 'r3', text: 'Draft sanction order for HOE signature', completed: false },
       ],
       createdDate: new Date(Date.now() - 3600000 * 24).toISOString(),
       tags: ['Procurement', 'File Movement'],
@@ -174,49 +174,49 @@ export const getSampleInitialItems = (): OfficialItem[] => {
     },
     {
       id: 'task-105',
-      title: 'Telephone Follow-up with Regional Directors regarding Quarterly Inspection Reports',
+      title: 'Telephone Follow-up with Chief Superintendents regarding Exam Center Inspection Preparedness',
       type: 'followup',
-      referenceNo: 'TEL/REG/2026-Q3',
-      assignedBy: 'Sir (Verbal Instruction)',
-      assignee: 'Executive Assistant',
-      department: 'Field Operations',
+      referenceNo: 'TEL/HOE/2026-EXAM',
+      assignedBy: 'HOE (Sir Verbal Instruction)',
+      assignee: 'PA to HOE',
+      department: 'Examination Vigilance',
       dueDate: today,
       dueTime: '17:30',
       priority: 'high',
       status: 'pending',
-      description: 'Sir instructed during morning tea to call all 4 regional directors and remind them to dispatch their Q3 inspection reports without further delay.',
-      actionRequired: 'Call Regional Offices (Lahore, Karachi, Islamabad, Peshawar) and log dispatch tracking numbers.',
+      description: 'HOE instructed to call all regional center superintendents and verify that question paper lockers, surveillance cameras, and admit card verification desks are ready.',
+      actionRequired: 'Call Center In-charges (North, South, Central) and submit telephonic briefing note to HOE.',
       checklist: [
-        { id: 'f1', text: 'Call North Region Office', completed: true },
-        { id: 'f2', text: 'Call South Region Office', completed: false },
-        { id: 'f3', text: 'Call Central Region Office', completed: false },
-        { id: 'f4', text: 'Submit telephonic briefing note to Sir', completed: false },
+        { id: 'f1', text: 'Call North Center Chief Superintendent', completed: true },
+        { id: 'f2', text: 'Call South Center Chief Superintendent', completed: false },
+        { id: 'f3', text: 'Call Central Exam Complex Superintendent', completed: false },
+        { id: 'f4', text: 'Submit telephonic briefing note to HOE (Sir)', completed: false },
       ],
       createdDate: new Date(Date.now() - 3600000 * 5).toISOString(),
-      tags: ['Sir Directive', 'Follow-up', 'Regional'],
+      tags: ['HOE Directive', 'Follow-up', 'Exam Centers'],
       isHighlightedAsSirDirective: true,
     },
     {
       id: 'task-106',
-      title: 'Signed Official Notification on Revised Office Timings Circulated',
+      title: 'Signed Official Notification on Examination Date Sheet & Roll Number Slip Issuance',
       type: 'correspondence',
-      referenceNo: 'NOTIF/ESTB/2026-19',
-      assignedBy: 'Director General',
+      referenceNo: 'NOTIF/HOE/2026-19',
+      assignedBy: 'Head of Examination (HOE)',
       assignee: 'Executive Desk',
-      department: 'Establishment Branch',
+      department: 'Examination Conduct Branch',
       dueDate: getDateWithOffset(-1),
       dueTime: '15:00',
       priority: 'normal',
       status: 'completed',
-      description: 'Notification signed by Sir yesterday evening regarding revised summer working hours.',
-      actionRequired: 'Dispatched and uploaded on official intranet portal.',
+      description: 'Official date sheet and roll number slip notification approved and signed by HOE (Sir) yesterday.',
+      actionRequired: 'Dispatched to all institutions, affiliated colleges, and published on examination portal.',
       checklist: [
-        { id: 'n1', text: 'Obtain Sir signature on original master sheet', completed: true },
-        { id: 'n2', text: 'Dispatch copies to all branches & notice board', completed: true },
+        { id: 'n1', text: 'Obtain HOE signature on original master notification', completed: true },
+        { id: 'n2', text: 'Dispatch copies to all institutions and publish online', completed: true },
       ],
       createdDate: new Date(Date.now() - 3600000 * 30).toISOString(),
       completedAt: new Date(Date.now() - 3600000 * 10).toISOString(),
-      completionNotes: 'All branches acknowledged receipt via email and dispatch peon book.',
+      completionNotes: 'Acknowledged by all centers and uploaded on portal.',
       tags: ['Notification', 'Dispatched'],
       isHighlightedAsSirDirective: true,
     },
@@ -231,7 +231,20 @@ export const loadItemsFromStorage = (): OfficialItem[] => {
       saveItemsToStorage(initial);
       return initial;
     }
-    return JSON.parse(data);
+    const parsed: OfficialItem[] = JSON.parse(data);
+    // Migrate any older sample items that still mention Director General / DG
+    const migrated = parsed.map((item) => {
+      let assignedBy = item.assignedBy;
+      if (assignedBy.includes('Director General') || assignedBy === 'Worthy Sir / DG') {
+        assignedBy = assignedBy.replace('Director General', 'Head of Examination (HOE)').replace('Worthy Sir / DG', 'Head of Examination (HOE)');
+      }
+      let title = item.title;
+      if (title.includes('Director General')) {
+        title = title.replace(/Director General/g, 'Head of Examination (HOE)');
+      }
+      return { ...item, assignedBy, title };
+    });
+    return migrated;
   } catch (err) {
     console.error('Error loading items from localStorage:', err);
     return getSampleInitialItems();
@@ -252,7 +265,19 @@ export const loadSettingsFromStorage = (): UserSettings => {
     if (!data) {
       return DEFAULT_SETTINGS;
     }
-    return { ...DEFAULT_SETTINGS, ...JSON.parse(data) };
+    const parsed = JSON.parse(data);
+    const settings: UserSettings = { ...DEFAULT_SETTINGS, ...parsed };
+    // Automatically update if previously contained Director General / DG
+    if (!settings.superiorTitle || settings.superiorTitle.includes('Director General') || settings.superiorTitle.includes('DG')) {
+      settings.superiorTitle = 'Head of Examination (HOE)';
+    }
+    if (settings.officeName.includes('Director General') || settings.officeName === 'Executive Office & Secretariat') {
+      settings.officeName = 'Office of the Head of Examination (HOE)';
+    }
+    if (settings.officerTitle.includes('DG') || settings.officerTitle.includes('Executive Coordinator')) {
+      settings.officerTitle = 'Personal Assistant to HOE';
+    }
+    return settings;
   } catch (err) {
     console.error('Error loading settings from localStorage:', err);
     return DEFAULT_SETTINGS;

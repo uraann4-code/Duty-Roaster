@@ -113,7 +113,7 @@ export default function App() {
       id: `task-${Date.now()}`,
       title: '',
       type: 'directive',
-      referenceNo: `DIR/SIR/${new Date().getFullYear()}/${Math.floor(1000 + Math.random() * 9000)}`,
+      referenceNo: `DIR/HOE/${new Date().getFullYear()}/${Math.floor(1000 + Math.random() * 9000)}`,
       assignedBy: settings.superiorTitle,
       assignee: settings.officerName,
       department: settings.departmentName,
@@ -123,10 +123,10 @@ export default function App() {
       status: 'pending',
       description: '',
       checklist: [
-        { id: 'c1', text: 'Check previous papers & examine rules', completed: false },
-        { id: 'c2', text: 'Put up file / prepare brief for Sir', completed: false },
+        { id: 'c1', text: 'Check examination rules & background records', completed: false },
+        { id: 'c2', text: 'Put up file / prepare brief for HOE approval', completed: false },
       ],
-      tags: ['Sir Directive'],
+      tags: ['HOE Directive'],
       isHighlightedAsSirDirective: true,
       createdDate: new Date().toISOString(),
     });

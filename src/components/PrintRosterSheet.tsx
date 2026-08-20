@@ -32,10 +32,10 @@ export const PrintRosterSheet: React.FC<PrintRosterSheetProps> = ({
       {/* Official Header */}
       <div className="text-center border-b-2 border-black pb-4 mb-4">
         <div className="text-[11pt] tracking-widest uppercase font-semibold text-slate-700">
-          {settings.officeName || 'EXECUTIVE SECRETARIAT'}
+          {settings.officeName || 'OFFICE OF THE HEAD OF EXAMINATION (HOE)'}
         </div>
         <div className="text-[10pt] uppercase text-slate-600 font-medium">
-          {settings.departmentName || 'ADMINISTRATION & COORDINATION DIRECTORATE'}
+          {settings.departmentName || 'EXAMINATION & ASSESSMENT DIRECTORATE'}
         </div>
         <div className="text-[16pt] font-black tracking-tight text-black mt-2 font-display uppercase border-y border-black py-1 my-2">
           DAILY EXECUTIVE DUTY ROSTER & ACTION PLAN
@@ -221,7 +221,7 @@ export const PrintRosterSheet: React.FC<PrintRosterSheetProps> = ({
           <div className="text-slate-600 text-[8.5pt]">Competent Authority / Reviewing Head</div>
           <div className="text-slate-500 text-[7.5pt]">Office Stamp & Seal</div>
           <div className="pt-8 border-t border-black w-48 text-[8pt] text-slate-700 font-semibold text-right ml-auto">
-            Signature of Worthy Sir / Head
+            Signature of Head of Exam (HOE)
           </div>
         </div>
       </div>
