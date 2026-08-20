@@ -224,7 +224,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-600 selection:text-white">
+    <div className="min-h-screen bg-slate-100 text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white">
       {/* Top Navigation */}
       <Navbar
         activeTab={activeTab}
@@ -256,9 +256,9 @@ export default function App() {
             />
 
             {/* Bento Quick Action Shortcut Bar */}
-            <div className="no-print bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xs flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center space-x-2 text-xs font-semibold text-slate-300">
-                <Sparkles className="w-4 h-4 text-orange-400" />
+            <div className="no-print bg-white border border-slate-200 rounded-2xl p-4 shadow-xs flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center space-x-2 text-xs font-bold text-slate-700">
+                <Sparkles className="w-4 h-4 text-orange-600" />
                 <span>Quick Log Directives:</span>
               </div>
               <div className="flex flex-wrap items-center gap-2">
@@ -267,9 +267,9 @@ export default function App() {
                     setEditingItem(null);
                     setIsFormModalOpen(true);
                   }}
-                  className="bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 border border-orange-500/30 text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200 text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <Crown className="w-3.5 h-3.5" />
+                  <Crown className="w-3.5 h-3.5 text-orange-600" />
                   <span>+ Boss Directive</span>
                 </button>
                 <button
@@ -277,9 +277,9 @@ export default function App() {
                     setEditingItem(null);
                     setIsFormModalOpen(true);
                   }}
-                  className="bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <Users className="w-3.5 h-3.5" />
+                  <Users className="w-3.5 h-3.5 text-blue-600" />
                   <span>+ Official Meeting</span>
                 </button>
                 <button
@@ -287,14 +287,14 @@ export default function App() {
                     setEditingItem(null);
                     setIsFormModalOpen(true);
                   }}
-                  className="bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <Mail className="w-3.5 h-3.5" />
+                  <Mail className="w-3.5 h-3.5 text-amber-600" />
                   <span>+ Inward Dak / Letter</span>
                 </button>
                 <button
                   onClick={() => setActiveTab('roster')}
-                  className="bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow transition-colors cursor-pointer"
+                  className="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow transition-colors cursor-pointer"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>Print Today's Roster (PDF)</span>
@@ -323,15 +323,15 @@ export default function App() {
               {/* Main Column (2-Span): Active Directives & Tasks Cards */}
               <div className="lg:col-span-2 space-y-4">
                 {filteredItems.length === 0 ? (
-                  <div className="bg-slate-900 rounded-2xl border border-slate-800 p-12 text-center shadow-xs space-y-4">
-                    <div className="w-14 h-14 bg-slate-800 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto border border-slate-700">
+                  <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-xs space-y-4">
+                    <div className="w-14 h-14 bg-slate-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto border border-slate-200">
                       <CheckCircle2 className="w-8 h-8" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold text-slate-100">
+                      <h3 className="text-base font-bold text-slate-900">
                         No Directives or Dak Found
                       </h3>
-                      <p className="text-xs text-slate-400 mt-1">
+                      <p className="text-xs text-slate-500 mt-1">
                         {searchQuery || selectedCategory !== 'all' || selectedPriority !== 'all'
                           ? 'No items matched your current search and filters.'
                           : 'All official work is currently clear! Enter a new directive, meeting, or dak.'}
@@ -342,7 +342,7 @@ export default function App() {
                         setEditingItem(null);
                         setIsFormModalOpen(true);
                       }}
-                      className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
+                      className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
                     >
                       <PlusCircle className="w-4 h-4" />
                       <span>Enter New Directive / Dak</span>
@@ -370,50 +370,50 @@ export default function App() {
               {/* Right Bento Widgets Column */}
               <div className="space-y-6">
                 {/* Module 1: Daily Productivity Insights */}
-                <div className="bg-indigo-600 border border-indigo-500 rounded-2xl p-5 text-white shadow-xs">
+                <div className="bg-gradient-to-br from-indigo-700 to-indigo-900 border border-indigo-600 rounded-2xl p-5 text-white shadow-xs">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-medium text-indigo-200">Daily Productivity Insights</span>
-                    <span className="text-xs font-bold bg-indigo-500/40 border border-indigo-400/40 px-2 py-0.5 rounded-full">Live Desk</span>
+                    <span className="text-xs font-semibold text-indigo-100">Daily Productivity Insights</span>
+                    <span className="text-xs font-bold bg-indigo-500/50 border border-indigo-400/40 px-2 py-0.5 rounded-full">Live Desk</span>
                   </div>
                   <div className="flex items-baseline gap-2 mb-2">
-                    <div className="text-3xl font-bold">
+                    <div className="text-3xl font-extrabold">
                       {items.length > 0 ? Math.round((completedCount / items.length) * 100) : 100}%
                     </div>
-                    <span className="text-xs text-indigo-200">Disposal Rate</span>
+                    <span className="text-xs text-indigo-200 font-medium">Disposal Rate</span>
                   </div>
-                  <div className="w-full bg-indigo-950/40 h-2 rounded-full overflow-hidden mb-4">
+                  <div className="w-full bg-indigo-950/60 h-2.5 rounded-full overflow-hidden mb-4">
                     <div 
-                      className="bg-white h-full transition-all duration-500" 
+                      className="bg-emerald-400 h-full transition-all duration-500 rounded-full" 
                       style={{ width: `${items.length > 0 ? (completedCount / items.length) * 100 : 100}%` }}
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-3 text-xs border-t border-indigo-500/50 pt-3">
+                  <div className="grid grid-cols-2 gap-3 text-xs border-t border-indigo-600/60 pt-3">
                     <div>
-                      <div className="text-indigo-200">Pending Orders</div>
+                      <div className="text-indigo-200 font-medium">Pending Orders</div>
                       <div className="text-base font-bold text-white mt-0.5">{pendingCount} Items</div>
                     </div>
                     <div>
-                      <div className="text-indigo-200">Disposed / Closed</div>
+                      <div className="text-indigo-200 font-medium">Disposed / Closed</div>
                       <div className="text-base font-bold text-white mt-0.5">{completedCount} Files</div>
                     </div>
                   </div>
                 </div>
 
                 {/* Module 2: Upcoming Meetings & Official Schedule */}
-                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xs">
+                <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold text-sm text-slate-100 flex items-center gap-2">
-                      <Users className="w-4 h-4 text-blue-400" />
+                    <h3 className="font-bold text-sm text-slate-900 flex items-center gap-2">
+                      <Users className="w-4 h-4 text-blue-600" />
                       <span>Today's Meeting Schedule</span>
                     </h3>
-                    <span className="text-xs text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md font-medium">
+                    <span className="text-xs text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md font-semibold">
                       {selectedRosterDate}
                     </span>
                   </div>
 
                   <div className="space-y-3">
                     {items.filter(i => i.type === 'meeting' && i.dueDate === selectedRosterDate).length === 0 ? (
-                      <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 text-center text-xs text-slate-400">
+                      <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-center text-xs text-slate-500 font-medium">
                         No official meetings scheduled for today.
                       </div>
                     ) : (
@@ -426,15 +426,15 @@ export default function App() {
                               setEditingItem(meeting);
                               setIsFormModalOpen(true);
                             }}
-                            className="bg-slate-950 p-3 rounded-xl border border-slate-800 hover:border-slate-700 cursor-pointer transition-colors"
+                            className="bg-slate-50 p-3 rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-100/70 cursor-pointer transition-colors"
                           >
                             <div className="flex items-center justify-between text-xs">
-                              <span className="font-medium text-slate-200 truncate">{meeting.title}</span>
-                              <span className="text-[11px] text-blue-400 font-mono font-semibold">{meeting.dueTime}</span>
+                              <span className="font-bold text-slate-900 truncate">{meeting.title}</span>
+                              <span className="text-[11px] text-blue-700 font-mono font-bold">{meeting.dueTime}</span>
                             </div>
                             {meeting.locationOrVenue && (
-                              <div className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
-                                <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                              <div className="text-[11px] text-slate-600 mt-1 flex items-center gap-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
                                 <span>{meeting.locationOrVenue}</span>
                               </div>
                             )}
@@ -445,22 +445,22 @@ export default function App() {
                 </div>
 
                 {/* Module 3: Daily Planner & Duty Roster Quick Launch */}
-                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xs">
+                <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-sm text-slate-100 flex items-center gap-2">
-                      <CalendarCheck className="w-4 h-4 text-emerald-400" />
+                    <h3 className="font-bold text-sm text-slate-900 flex items-center gap-2">
+                      <CalendarCheck className="w-4 h-4 text-emerald-600" />
                       <span>Daily Duty Roster</span>
                     </h3>
-                    <span className="text-xs text-emerald-400 font-mono font-semibold">Ready to Print</span>
+                    <span className="text-xs text-emerald-700 font-mono font-bold bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">Ready to Print</span>
                   </div>
-                  <p className="text-xs text-slate-400 mb-4 leading-relaxed">
-                    Generate the official Gazette-style daily duty roaster and planner for {selectedRosterDate} with Sir's directives and correspondence logs.
+                  <p className="text-xs text-slate-600 mb-4 leading-relaxed">
+                    Generate the official Gazette-style daily duty roster and planner for {selectedRosterDate} with Sir's directives and correspondence logs.
                   </p>
                   <button
                     onClick={() => setActiveTab('roster')}
-                    className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 font-medium text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    className="w-full bg-slate-50 hover:bg-slate-100 text-slate-800 hover:text-slate-900 border border-slate-200 font-bold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-2xs"
                   >
-                    <Printer className="w-4 h-4 text-emerald-400" />
+                    <Printer className="w-4 h-4 text-emerald-600" />
                     <span>Open & Print Daily Duty Roster</span>
                   </button>
                 </div>
@@ -490,16 +490,16 @@ export default function App() {
         {/* VIEW 3: Disposed / Completed Archive */}
         {activeTab === 'archive' && (
           <div className="space-y-4">
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xs flex flex-wrap items-center justify-between gap-3">
+            <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center space-x-3">
-                <div className="p-2.5 bg-emerald-950 border border-emerald-800 text-emerald-400 rounded-xl">
+                <div className="p-2.5 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl">
                   <FileCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-base font-bold text-slate-100">
+                  <h2 className="text-base font-bold text-slate-900">
                     Disposed & Completed Official Archive
                   </h2>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-600">
                     {completedCount} official tasks and correspondence completed and closed
                   </p>
                 </div>
@@ -523,8 +523,8 @@ export default function App() {
             />
 
             {filteredItems.length === 0 ? (
-              <div className="bg-slate-900 rounded-2xl border border-slate-800 p-12 text-center max-w-md mx-auto">
-                <p className="text-xs text-slate-400">No completed records found in the archive.</p>
+              <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center max-w-md mx-auto">
+                <p className="text-xs text-slate-600">No completed records found in the archive.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -548,16 +548,16 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="no-print border-t border-slate-800 bg-slate-950 py-4 mt-12 text-xs text-slate-500">
+      <footer className="no-print border-t border-slate-200 bg-white py-4 mt-12 text-xs text-slate-600">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p>
-            Official Executive Secretariat & Daily Duty Planner • <span className="font-semibold text-slate-300">{settings.officeName}</span>
+            Official Executive Secretariat & Daily Duty Planner • <span className="font-bold text-slate-800">{settings.officeName}</span>
           </p>
           <div className="flex items-center space-x-4">
-            <span>Logged in as: <strong className="text-slate-200">{settings.officerName}</strong></span>
+            <span>Logged in as: <strong className="text-slate-900">{settings.officerName}</strong></span>
             <button
               onClick={() => setIsSettingsModalOpen(true)}
-              className="text-emerald-400 hover:text-emerald-300 font-semibold cursor-pointer"
+              className="text-emerald-700 hover:text-emerald-800 font-bold cursor-pointer underline underline-offset-2"
             >
               Configure Office
             </button>
