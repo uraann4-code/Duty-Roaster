@@ -19,7 +19,7 @@ import { DEFAULT_SETTINGS, getSampleInitialItems } from './storage';
 // Initialize Firebase App
 export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-// Initialize Firestore (with explicit databaseId if configured)
+// Initialize Firestore (with explicit databaseId if configured in project)
 export const db = firebaseConfig.firestoreDatabaseId
   ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
   : getFirestore(app);
@@ -27,6 +27,27 @@ export const db = firebaseConfig.firestoreDatabaseId
 const TASKS_COLLECTION = 'tasks';
 const SETTINGS_COLLECTION = 'settings';
 const GENERAL_SETTINGS_DOC = 'general';
+const SYSTEM_META_DOC = 'system_meta';
+
+/**
+ * Sanitize objects before saving to Firestore to prevent "Unsupported field value: undefined" errors
+ */
+export function sanitizeForFirestore<T>(data: T): any {
+  if (data === null || data === undefined) return null;
+  if (Array.isArray(data)) {
+    return data.map((item) => sanitizeForFirestore(item));
+  }
+  if (typeof data === 'object' && !(data instanceof Date)) {
+    const cleanObj: Record<string, any> = {};
+    for (const [key, val] of Object.entries(data)) {
+      if (val !== undefined) {
+        cleanObj[key] = sanitizeForFirestore(val);
+      }
+    }
+    return cleanObj;
+  }
+  return data;
+}
 
 /**
  * Subscribe to real-time updates of official tasks/directives from Firestore
@@ -36,63 +57,74 @@ export const subscribeToOfficialItems = (
   onError?: (error: Error) => void
 ): Unsubscribe => {
   const colRef = collection(db, TASKS_COLLECTION);
+  const metaDocRef = doc(db, SETTINGS_COLLECTION, SYSTEM_META_DOC);
 
   return onSnapshot(
     colRef,
     async (snapshot) => {
+      // Check if we need one-time initial seed
       if (snapshot.empty) {
-        // Seed default items if the cloud database is completely empty
-        const initial = getSampleInitialItems();
         try {
-          const batch = writeBatch(db);
-          for (const item of initial) {
-            const docRef = doc(db, TASKS_COLLECTION, item.id);
-            batch.set(docRef, { ...item, updatedAt: new Date().toISOString() });
+          const metaSnap = await getDoc(metaDocRef);
+          if (!metaSnap.exists()) {
+            // First time setup on clean database: seed official sample tasks
+            const initial = getSampleInitialItems();
+            const batch = writeBatch(db);
+            for (const item of initial) {
+              const docRef = doc(db, TASKS_COLLECTION, item.id);
+              batch.set(docRef, sanitizeForFirestore({ ...item, updatedAt: new Date().toISOString() }));
+            }
+            batch.set(metaDocRef, { initialized: true, seededAt: new Date().toISOString() });
+            await batch.commit();
+            onData(initial);
+            return;
           }
-          await batch.commit();
         } catch (seedErr) {
-          console.error('Error seeding initial tasks to Firestore:', seedErr);
+          console.warn('System meta check note:', seedErr);
         }
-        onData(initial);
-      } else {
-        const items: OfficialItem[] = snapshot.docs.map((docSnap) => {
-          const data = docSnap.data();
-          return {
-            id: docSnap.id,
-            title: data.title || '',
-            type: data.type || 'directive',
-            referenceNo: data.referenceNo || '',
-            assignedBy: data.assignedBy || 'Head of Examination (HOE)',
-            assignee: data.assignee || 'Mubashir Qayyum',
-            department: data.department || 'Examination & Assessment Directorate',
-            dueDate: data.dueDate || new Date().toISOString().split('T')[0],
-            dueTime: data.dueTime || '14:00',
-            priority: data.priority || 'urgent',
-            status: data.status || 'pending',
-            actionRequired: data.actionRequired || '',
-            locationOrVenue: data.locationOrVenue || '',
-            correspondenceSource: data.correspondenceSource || '',
-            description: data.description || '',
-            checklist: Array.isArray(data.checklist) ? data.checklist : [],
-            createdDate: data.createdDate || new Date().toISOString(),
-            completedAt: data.completedAt || undefined,
-            completionNotes: data.completionNotes || undefined,
-            tags: Array.isArray(data.tags) ? data.tags : [],
-            isHighlightedAsSirDirective: !!data.isHighlightedAsSirDirective,
-          };
-        });
-
-        // Sort items: pending first, then by dueDate/dueTime
-        items.sort((a, b) => {
-          if (a.status === 'completed' && b.status !== 'completed') return 1;
-          if (a.status !== 'completed' && b.status === 'completed') return -1;
-          const aDateTime = `${a.dueDate} ${a.dueTime}`;
-          const bDateTime = `${b.dueDate} ${b.dueTime}`;
-          return aDateTime.localeCompare(bDateTime);
-        });
-
-        onData(items);
+        // If meta exists and snapshot is empty, it means the database has 0 items
+        onData([]);
+        return;
       }
+
+      // Map Firestore documents to OfficialItem
+      const items: OfficialItem[] = snapshot.docs.map((docSnap) => {
+        const data = docSnap.data();
+        return {
+          id: docSnap.id,
+          title: data.title || '',
+          type: data.type || 'directive',
+          referenceNo: data.referenceNo || '',
+          assignedBy: data.assignedBy || 'Head of Examination (HOE)',
+          assignee: data.assignee || 'Mubashir Qayyum',
+          department: data.department || 'Examination & Assessment Directorate',
+          dueDate: data.dueDate || new Date().toISOString().split('T')[0],
+          dueTime: data.dueTime || '09:00',
+          priority: data.priority || 'urgent',
+          status: data.status || 'pending',
+          actionRequired: data.actionRequired || '',
+          locationOrVenue: data.locationOrVenue || '',
+          correspondenceSource: data.correspondenceSource || '',
+          description: data.description || '',
+          checklist: Array.isArray(data.checklist) ? data.checklist : [],
+          createdDate: data.createdDate || new Date().toISOString(),
+          completedAt: data.completedAt || undefined,
+          completionNotes: data.completionNotes || undefined,
+          tags: Array.isArray(data.tags) ? data.tags : [],
+          isHighlightedAsSirDirective: !!data.isHighlightedAsSirDirective,
+        };
+      });
+
+      // Sort items: pending first, then by dueDate and dueTime
+      items.sort((a, b) => {
+        if (a.status === 'completed' && b.status !== 'completed') return 1;
+        if (a.status !== 'completed' && b.status === 'completed') return -1;
+        const aDateTime = `${a.dueDate} ${a.dueTime}`;
+        const bDateTime = `${b.dueDate} ${b.dueTime}`;
+        return aDateTime.localeCompare(bDateTime);
+      });
+
+      onData(items);
     },
     (err) => {
       console.error('Firestore items subscription error:', err);
@@ -106,14 +138,11 @@ export const subscribeToOfficialItems = (
  */
 export const saveTaskToDatabase = async (item: OfficialItem): Promise<void> => {
   const docRef = doc(db, TASKS_COLLECTION, item.id);
-  await setDoc(
-    docRef,
-    {
-      ...item,
-      updatedAt: new Date().toISOString(),
-    },
-    { merge: true }
-  );
+  const payload = sanitizeForFirestore({
+    ...item,
+    updatedAt: new Date().toISOString(),
+  });
+  await setDoc(docRef, payload, { merge: true });
 };
 
 /**
@@ -138,7 +167,7 @@ export const subscribeToOfficeSettings = (
     async (snapshot) => {
       if (!snapshot.exists()) {
         try {
-          await setDoc(docRef, { ...DEFAULT_SETTINGS, updatedAt: new Date().toISOString() });
+          await setDoc(docRef, sanitizeForFirestore({ ...DEFAULT_SETTINGS, updatedAt: new Date().toISOString() }));
         } catch (err) {
           console.error('Error creating default settings in Firestore:', err);
         }
@@ -167,12 +196,9 @@ export const subscribeToOfficeSettings = (
  */
 export const saveOfficeSettingsToDatabase = async (settings: UserSettings): Promise<void> => {
   const docRef = doc(db, SETTINGS_COLLECTION, GENERAL_SETTINGS_DOC);
-  await setDoc(
-    docRef,
-    {
-      ...settings,
-      updatedAt: new Date().toISOString(),
-    },
-    { merge: true }
-  );
+  const payload = sanitizeForFirestore({
+    ...settings,
+    updatedAt: new Date().toISOString(),
+  });
+  await setDoc(docRef, payload, { merge: true });
 };

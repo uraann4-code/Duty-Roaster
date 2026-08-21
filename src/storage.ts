@@ -227,27 +227,13 @@ export const loadItemsFromStorage = (): OfficialItem[] => {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
     if (!data) {
-      const initial = getSampleInitialItems();
-      saveItemsToStorage(initial);
-      return initial;
+      return [];
     }
     const parsed: OfficialItem[] = JSON.parse(data);
-    // Migrate any older sample items that still mention Director General / DG
-    const migrated = parsed.map((item) => {
-      let assignedBy = item.assignedBy;
-      if (assignedBy.includes('Director General') || assignedBy === 'Worthy Sir / DG') {
-        assignedBy = assignedBy.replace('Director General', 'Head of Examination (HOE)').replace('Worthy Sir / DG', 'Head of Examination (HOE)');
-      }
-      let title = item.title;
-      if (title.includes('Director General')) {
-        title = title.replace(/Director General/g, 'Head of Examination (HOE)');
-      }
-      return { ...item, assignedBy, title };
-    });
-    return migrated;
+    return Array.isArray(parsed) ? parsed : [];
   } catch (err) {
     console.error('Error loading items from localStorage:', err);
-    return getSampleInitialItems();
+    return [];
   }
 };
 

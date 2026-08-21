@@ -41,7 +41,7 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
   const [assignee, setAssignee] = useState(settings.officerName || 'PA to HOE');
   const [department, setDepartment] = useState(settings.departmentName || 'Examination & Assessment Directorate');
   const [dueDate, setDueDate] = useState(today);
-  const [dueTime, setDueTime] = useState('14:00');
+  const [dueTime, setDueTime] = useState('09:00');
   const [priority, setPriority] = useState<PriorityLevel>('urgent');
   const [status, setStatus] = useState<TaskStatus>('pending');
   const [description, setDescription] = useState('');
@@ -62,7 +62,7 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
       setAssignee(initialItem.assignee || settings.officerName);
       setDepartment(initialItem.department || settings.departmentName);
       setDueDate(initialItem.dueDate || today);
-      setDueTime(initialItem.dueTime || '14:00');
+      setDueTime(initialItem.dueTime || '09:00');
       setPriority(initialItem.priority || 'high');
       setStatus(initialItem.status || 'pending');
       setDescription(initialItem.description || '');
@@ -80,7 +80,7 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
       setAssignee(settings.officerName || 'PA to HOE');
       setDepartment(settings.departmentName || 'Examination & Assessment Directorate');
       setDueDate(today);
-      setDueTime('14:00');
+      setDueTime('09:00');
       setPriority('urgent');
       setStatus('pending');
       setDescription('');

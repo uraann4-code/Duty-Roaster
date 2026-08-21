@@ -48,6 +48,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'tasks' | 'roster' | 'archive'>('tasks');
   const [selectedRosterDate, setSelectedRosterDate] = useState<string>(getTodayDateString());
   const [dbConnected, setDbConnected] = useState<boolean>(true);
+  const [isInitialSyncing, setIsInitialSyncing] = useState<boolean>(() => items.length === 0);
 
   // Modal states
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -59,6 +60,7 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedPriority, setSelectedPriority] = useState('all');
   const [selectedDateFilter, setSelectedDateFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState<'active' | 'completed' | 'all'>('all');
   const [sortBy, setSortBy] = useState('urgency');
 
   // Real-time Firestore Tasks & Directives Database Subscription
@@ -68,10 +70,12 @@ export default function App() {
         setItems(firestoreItems);
         saveItemsToStorage(firestoreItems);
         setDbConnected(true);
+        setIsInitialSyncing(false);
       },
       (error) => {
         console.warn('Firestore subscription fallback to local cache:', error);
         setDbConnected(false);
+        setIsInitialSyncing(false);
       }
     );
     return () => unsubscribe();
@@ -251,7 +255,10 @@ export default function App() {
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
       // Tab matching
-      if (activeTab === 'tasks' && item.status === 'completed') return false;
+      if (activeTab === 'tasks') {
+        if (statusFilter === 'active' && item.status === 'completed') return false;
+        if (statusFilter === 'completed' && item.status !== 'completed') return false;
+      }
       if (activeTab === 'archive' && item.status !== 'completed') return false;
 
       // Search query
@@ -304,7 +311,7 @@ export default function App() {
       }
       return new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime();
     });
-  }, [items, activeTab, searchQuery, selectedCategory, selectedPriority, selectedDateFilter, sortBy]);
+  }, [items, activeTab, searchQuery, selectedCategory, selectedPriority, selectedDateFilter, statusFilter, sortBy]);
 
   // Quick statistics
   const pendingItems = items.filter((i) => i.status !== 'completed');
@@ -318,22 +325,27 @@ export default function App() {
       setSelectedPriority('urgent');
       setSelectedCategory('all');
       setSelectedDateFilter('all');
+      setStatusFilter('active');
     } else if (filterKey === 'sir_directives') {
       setSelectedCategory('directive');
       setSelectedPriority('all');
       setSelectedDateFilter('all');
+      setStatusFilter('active');
     } else if (filterKey === 'due_today') {
       setSelectedDateFilter('today');
       setSelectedCategory('all');
       setSelectedPriority('all');
+      setStatusFilter('active');
     } else if (filterKey === 'overdue') {
       setSelectedDateFilter('overdue');
       setSelectedCategory('all');
       setSelectedPriority('all');
+      setStatusFilter('active');
     } else {
       setSelectedCategory('all');
       setSelectedPriority('all');
       setSelectedDateFilter('all');
+      setStatusFilter('all');
     }
   };
 
@@ -350,6 +362,7 @@ export default function App() {
         onOpenSettings={() => setIsSettingsModalOpen(true)}
         pendingCount={pendingCount}
         urgentPendingCount={urgentPendingCount}
+        completedCount={completedCount}
         settings={settings}
         selectedRosterDate={selectedRosterDate}
         dbConnected={dbConnected}
@@ -427,17 +440,33 @@ export default function App() {
               setSelectedPriority={setSelectedPriority}
               selectedDateFilter={selectedDateFilter}
               setSelectedDateFilter={setSelectedDateFilter}
+              statusFilter={statusFilter}
+              setStatusFilter={setStatusFilter}
               sortBy={sortBy}
               setSortBy={setSortBy}
-              totalCount={pendingItems.length}
+              totalCount={items.length}
               filteredCount={filteredItems.length}
+              pendingCount={pendingCount}
+              completedCount={completedCount}
             />
 
             {/* Bento Matrix: Active Tasks and Roster Dashboard Widgets */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Main Column (2-Span): Active Directives & Tasks Cards */}
               <div className="lg:col-span-2 space-y-4">
-                {filteredItems.length === 0 ? (
+                {isInitialSyncing ? (
+                  <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-xs space-y-4">
+                    <div className="w-10 h-10 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto" />
+                    <div>
+                      <h3 className="text-base font-bold text-slate-900">
+                        Connecting to Cloud Database...
+                      </h3>
+                      <p className="text-xs text-slate-500 mt-1">
+                        Fetching live official records & directives in real-time.
+                      </p>
+                    </div>
+                  </div>
+                ) : filteredItems.length === 0 ? (
                   <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-xs space-y-4">
                     <div className="w-14 h-14 bg-slate-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto border border-slate-200">
                       <CheckCircle2 className="w-8 h-8" />
@@ -449,19 +478,32 @@ export default function App() {
                       <p className="text-xs text-slate-500 mt-1">
                         {searchQuery || selectedCategory !== 'all' || selectedPriority !== 'all'
                           ? 'No items matched your current search and filters.'
+                          : statusFilter === 'active' && completedCount > 0
+                          ? `All pending work is clear! You have ${completedCount} completed/disposed record(s) in your archive.`
                           : 'All official work is currently clear! Enter a new directive, meeting, or dak.'}
                       </p>
                     </div>
-                    <button
-                      onClick={() => {
-                        setEditingItem(null);
-                        setIsFormModalOpen(true);
-                      }}
-                      className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
-                    >
-                      <PlusCircle className="w-4 h-4" />
-                      <span>Enter New Directive / Dak</span>
-                    </button>
+                    <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                      {statusFilter === 'active' && completedCount > 0 && (
+                        <button
+                          onClick={() => setStatusFilter('all')}
+                          className="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold rounded-lg inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
+                        >
+                          <CheckCircle2 className="w-4 h-4 text-indigo-600" />
+                          <span>Show All Records ({items.length})</span>
+                        </button>
+                      )}
+                      <button
+                        onClick={() => {
+                          setEditingItem(null);
+                          setIsFormModalOpen(true);
+                        }}
+                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
+                      >
+                        <PlusCircle className="w-4 h-4" />
+                        <span>Enter New Directive / Dak</span>
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 gap-4">

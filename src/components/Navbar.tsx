@@ -20,6 +20,7 @@ interface NavbarProps {
   onOpenSettings: () => void;
   pendingCount: number;
   urgentPendingCount: number;
+  completedCount?: number;
   settings: UserSettings;
   selectedRosterDate: string;
   dbConnected?: boolean;
@@ -32,6 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSettings,
   pendingCount,
   urgentPendingCount,
+  completedCount = 0,
   settings,
   selectedRosterDate,
   dbConnected = true,
@@ -168,6 +170,17 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <CheckCircle2 className="w-3.5 h-3.5" />
               <span>Archived</span>
+              {completedCount > 0 && (
+                <span
+                  className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                    activeTab === 'archive'
+                      ? 'bg-emerald-800 text-emerald-100 border border-emerald-600'
+                      : 'bg-slate-200 text-slate-700'
+                  }`}
+                >
+                  {completedCount}
+                </span>
+              )}
             </button>
           </div>
 
