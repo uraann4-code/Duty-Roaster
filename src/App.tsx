@@ -25,6 +25,15 @@ import {
   isOverdue,
   isDueToday
 } from './storage';
+import {
+  subscribeToOfficialItems,
+  saveTaskToDatabase,
+  deleteTaskFromDatabase,
+  subscribeToOfficeSettings,
+  saveOfficeSettingsToDatabase,
+  db
+} from './firebase';
+import { writeBatch, doc, collection } from 'firebase/firestore';
 import { Navbar } from './components/Navbar';
 import { PendingAlertBanner } from './components/PendingAlertBanner';
 import { FilterBar } from './components/FilterBar';
@@ -38,6 +47,7 @@ export default function App() {
   const [settings, setSettings] = useState<UserSettings>(() => loadSettingsFromStorage());
   const [activeTab, setActiveTab] = useState<'tasks' | 'roster' | 'archive'>('tasks');
   const [selectedRosterDate, setSelectedRosterDate] = useState<string>(getTodayDateString());
+  const [dbConnected, setDbConnected] = useState<boolean>(true);
 
   // Modal states
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -51,18 +61,40 @@ export default function App() {
   const [selectedDateFilter, setSelectedDateFilter] = useState('all');
   const [sortBy, setSortBy] = useState('urgency');
 
-  // Persist items
+  // Real-time Firestore Tasks & Directives Database Subscription
   useEffect(() => {
-    saveItemsToStorage(items);
-  }, [items]);
+    const unsubscribe = subscribeToOfficialItems(
+      (firestoreItems) => {
+        setItems(firestoreItems);
+        saveItemsToStorage(firestoreItems);
+        setDbConnected(true);
+      },
+      (error) => {
+        console.warn('Firestore subscription fallback to local cache:', error);
+        setDbConnected(false);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
 
-  // Persist settings
+  // Real-time Firestore Office Settings Database Subscription
   useEffect(() => {
-    saveSettingsToStorage(settings);
-  }, [settings]);
+    const unsubscribe = subscribeToOfficeSettings(
+      (firestoreSettings) => {
+        setSettings(firestoreSettings);
+        saveSettingsToStorage(firestoreSettings);
+        setDbConnected(true);
+      },
+      (error) => {
+        console.warn('Firestore settings subscription fallback:', error);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
 
-  // Handler: Add or Update item
-  const handleSaveItem = (savedItem: OfficialItem) => {
+  // Handler: Add or Update item directly in Firestore Database
+  const handleSaveItem = async (savedItem: OfficialItem) => {
+    // Optimistic UI update
     setItems((prev) => {
       const exists = prev.some((i) => i.id === savedItem.id);
       if (exists) {
@@ -70,41 +102,123 @@ export default function App() {
       }
       return [savedItem, ...prev];
     });
+
+    try {
+      await saveTaskToDatabase(savedItem);
+      setDbConnected(true);
+    } catch (err) {
+      console.error('Failed to save task to database:', err);
+    }
   };
 
-  // Handler: Delete item
-  const handleDeleteItem = (id: string) => {
+  // Handler: Delete item directly from Firestore Database
+  const handleDeleteItem = async (id: string) => {
     setItems((prev) => prev.filter((i) => i.id !== id));
+    try {
+      await deleteTaskFromDatabase(id);
+      setDbConnected(true);
+    } catch (err) {
+      console.error('Failed to delete task from database:', err);
+    }
   };
 
-  // Handler: Status Change
-  const handleStatusChange = (id: string, newStatus: TaskStatus, completionNote?: string) => {
+  // Handler: Status Change directly in Firestore Database
+  const handleStatusChange = async (id: string, newStatus: TaskStatus, completionNote?: string) => {
+    let updatedItem: OfficialItem | null = null;
     setItems((prev) =>
       prev.map((item) => {
         if (item.id !== id) return item;
-        return {
+        updatedItem = {
           ...item,
           status: newStatus,
           completedAt: newStatus === 'completed' ? new Date().toISOString() : undefined,
           completionNotes: completionNote !== undefined ? completionNote : item.completionNotes,
         };
+        return updatedItem;
       })
     );
+
+    if (updatedItem) {
+      try {
+        await saveTaskToDatabase(updatedItem);
+        setDbConnected(true);
+      } catch (err) {
+        console.error('Failed to update status in database:', err);
+      }
+    }
   };
 
-  // Handler: Checklist toggle
-  const handleToggleChecklist = (itemId: string, checkId: string) => {
+  // Handler: Checklist toggle directly in Firestore Database
+  const handleToggleChecklist = async (itemId: string, checkId: string) => {
+    let updatedItem: OfficialItem | null = null;
     setItems((prev) =>
       prev.map((item) => {
         if (item.id !== itemId) return item;
-        return {
+        updatedItem = {
           ...item,
           checklist: item.checklist.map((c) =>
             c.id === checkId ? { ...c, completed: !c.completed } : c
           ),
         };
+        return updatedItem;
       })
     );
+
+    if (updatedItem) {
+      try {
+        await saveTaskToDatabase(updatedItem);
+        setDbConnected(true);
+      } catch (err) {
+        console.error('Failed to update checklist in database:', err);
+      }
+    }
+  };
+
+  // Handler: Save Office Settings to Firestore Database
+  const handleSaveSettings = async (newSettings: UserSettings) => {
+    setSettings(newSettings);
+    saveSettingsToStorage(newSettings);
+    try {
+      await saveOfficeSettingsToDatabase(newSettings);
+      setDbConnected(true);
+    } catch (err) {
+      console.error('Failed to save settings to database:', err);
+    }
+  };
+
+  // Handler: Reset to Sample Data in Firestore Database
+  const handleResetSampleData = async () => {
+    const sample = getSampleInitialItems();
+    setItems(sample);
+    saveItemsToStorage(sample);
+    try {
+      const batch = writeBatch(db);
+      for (const item of sample) {
+        const docRef = doc(db, 'tasks', item.id);
+        batch.set(docRef, { ...item, updatedAt: new Date().toISOString() });
+      }
+      await batch.commit();
+      setDbConnected(true);
+    } catch (err) {
+      console.error('Failed to reset sample data in database:', err);
+    }
+  };
+
+  // Handler: Import Items to Firestore Database
+  const handleImportItems = async (importedItems: OfficialItem[]) => {
+    setItems(importedItems);
+    saveItemsToStorage(importedItems);
+    try {
+      const batch = writeBatch(db);
+      for (const item of importedItems) {
+        const docRef = doc(db, 'tasks', item.id);
+        batch.set(docRef, { ...item, updatedAt: new Date().toISOString() });
+      }
+      await batch.commit();
+      setDbConnected(true);
+    } catch (err) {
+      console.error('Failed to import items to database:', err);
+    }
   };
 
   // Open Form Modal for a specific date (used by Duty Roster)
@@ -238,6 +352,7 @@ export default function App() {
         urgentPendingCount={urgentPendingCount}
         settings={settings}
         selectedRosterDate={selectedRosterDate}
+        dbConnected={dbConnected}
       />
 
       {/* Main Bento Container */}
@@ -582,10 +697,10 @@ export default function App() {
         isOpen={isSettingsModalOpen}
         onClose={() => setIsSettingsModalOpen(false)}
         settings={settings}
-        onSaveSettings={setSettings}
+        onSaveSettings={handleSaveSettings}
         items={items}
-        onImportItems={setItems}
-        onResetSampleData={() => setItems(getSampleInitialItems())}
+        onImportItems={handleImportItems}
+        onResetSampleData={handleResetSampleData}
       />
     </div>
   );

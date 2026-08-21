@@ -1,0 +1,57 @@
+{
+  "entities": {
+    "Task": {
+      "title": "Official Item / Task",
+      "description": "Directives, meetings, correspondence, and reports",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "type": { "type": "string", "enum": ["directive", "meeting", "correspondence", "report", "followup"] },
+        "referenceNo": { "type": "string" },
+        "assignedBy": { "type": "string" },
+        "assignee": { "type": "string" },
+        "department": { "type": "string" },
+        "dueDate": { "type": "string" },
+        "dueTime": { "type": "string" },
+        "priority": { "type": "string", "enum": ["urgent", "high", "normal", "low"] },
+        "status": { "type": "string", "enum": ["pending", "in_progress", "completed"] },
+        "actionRequired": { "type": "string" },
+        "locationOrVenue": { "type": "string" },
+        "correspondenceSource": { "type": "string" },
+        "description": { "type": "string" },
+        "checklist": { "type": "array" },
+        "createdDate": { "type": "string" },
+        "completedAt": { "type": "string" },
+        "completionNotes": { "type": "string" },
+        "tags": { "type": "array" },
+        "isHighlightedAsSirDirective": { "type": "boolean" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "type", "dueDate", "dueTime", "priority", "status"]
+    },
+    "UserSettings": {
+      "title": "User / Office Settings",
+      "description": "Office titles, names, and superior designations",
+      "type": "object",
+      "properties": {
+        "officeName": { "type": "string" },
+        "departmentName": { "type": "string" },
+        "officerName": { "type": "string" },
+        "officerTitle": { "type": "string" },
+        "superiorTitle": { "type": "string" },
+        "showUrgentAlerts": { "type": "boolean" },
+        "updatedAt": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "Official task and directive documents"
+    },
+    "/settings/{settingId}": {
+      "schema": "UserSettings",
+      "description": "Office configuration document"
+    }
+  }
+}

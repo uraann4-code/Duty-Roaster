@@ -22,6 +22,7 @@ interface NavbarProps {
   urgentPendingCount: number;
   settings: UserSettings;
   selectedRosterDate: string;
+  dbConnected?: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -33,6 +34,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   urgentPendingCount,
   settings,
   selectedRosterDate,
+  dbConnected = true,
 }) => {
   const [currentTime, setCurrentTime] = React.useState<string>('');
 
@@ -71,6 +73,14 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         <div className="flex items-center space-x-3 sm:space-x-4 text-slate-600">
+          <div className={`hidden md:flex items-center space-x-1.5 px-2.5 py-1 rounded-lg border text-[11px] font-bold ${
+            dbConnected 
+              ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
+              : 'bg-amber-50 text-amber-800 border-amber-200'
+          }`}>
+            <span className={`w-2 h-2 rounded-full ${dbConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+            <span>{dbConnected ? 'Database: Live Cloud Synced' : 'Database: Local Mode'}</span>
+          </div>
           <div className="flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200 font-mono-ref">
             <Clock className="w-3.5 h-3.5 text-indigo-600 animate-pulse" />
             <span className="text-slate-700 font-medium">{currentTime || '00:00:00'}</span>
