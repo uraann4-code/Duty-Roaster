@@ -27,7 +27,6 @@ export const db = firebaseConfig.firestoreDatabaseId
 const TASKS_COLLECTION = 'tasks';
 const SETTINGS_COLLECTION = 'settings';
 const GENERAL_SETTINGS_DOC = 'general';
-const SYSTEM_META_DOC = 'system_meta';
 
 /**
  * Sanitize objects before saving to Firestore to prevent "Unsupported field value: undefined" errors
@@ -57,32 +56,12 @@ export const subscribeToOfficialItems = (
   onError?: (error: Error) => void
 ): Unsubscribe => {
   const colRef = collection(db, TASKS_COLLECTION);
-  const metaDocRef = doc(db, SETTINGS_COLLECTION, SYSTEM_META_DOC);
 
   return onSnapshot(
     colRef,
-    async (snapshot) => {
-      // Check if we need one-time initial seed
+    (snapshot) => {
       if (snapshot.empty) {
-        try {
-          const metaSnap = await getDoc(metaDocRef);
-          if (!metaSnap.exists()) {
-            // First time setup on clean database: seed official sample tasks
-            const initial = getSampleInitialItems();
-            const batch = writeBatch(db);
-            for (const item of initial) {
-              const docRef = doc(db, TASKS_COLLECTION, item.id);
-              batch.set(docRef, sanitizeForFirestore({ ...item, updatedAt: new Date().toISOString() }));
-            }
-            batch.set(metaDocRef, { initialized: true, seededAt: new Date().toISOString() });
-            await batch.commit();
-            onData(initial);
-            return;
-          }
-        } catch (seedErr) {
-          console.warn('System meta check note:', seedErr);
-        }
-        // If meta exists and snapshot is empty, it means the database has 0 items
+        // Database is empty (no items) - do NOT auto-seed dummy items
         onData([]);
         return;
       }

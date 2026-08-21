@@ -31,6 +31,7 @@ import {
   deleteTaskFromDatabase,
   subscribeToOfficeSettings,
   saveOfficeSettingsToDatabase,
+  sanitizeForFirestore,
   db
 } from './firebase';
 import { writeBatch, doc, collection } from 'firebase/firestore';
@@ -101,10 +102,9 @@ export default function App() {
     // Optimistic UI update
     setItems((prev) => {
       const exists = prev.some((i) => i.id === savedItem.id);
-      if (exists) {
-        return prev.map((i) => (i.id === savedItem.id ? savedItem : i));
-      }
-      return [savedItem, ...prev];
+      const updated = exists ? prev.map((i) => (i.id === savedItem.id ? savedItem : i)) : [savedItem, ...prev];
+      saveItemsToStorage(updated);
+      return updated;
     });
 
     try {
@@ -117,7 +117,11 @@ export default function App() {
 
   // Handler: Delete item directly from Firestore Database
   const handleDeleteItem = async (id: string) => {
-    setItems((prev) => prev.filter((i) => i.id !== id));
+    setItems((prev) => {
+      const updated = prev.filter((i) => i.id !== id);
+      saveItemsToStorage(updated);
+      return updated;
+    });
     try {
       await deleteTaskFromDatabase(id);
       setDbConnected(true);
@@ -129,8 +133,8 @@ export default function App() {
   // Handler: Status Change directly in Firestore Database
   const handleStatusChange = async (id: string, newStatus: TaskStatus, completionNote?: string) => {
     let updatedItem: OfficialItem | null = null;
-    setItems((prev) =>
-      prev.map((item) => {
+    setItems((prev) => {
+      const updated = prev.map((item) => {
         if (item.id !== id) return item;
         updatedItem = {
           ...item,
@@ -139,8 +143,10 @@ export default function App() {
           completionNotes: completionNote !== undefined ? completionNote : item.completionNotes,
         };
         return updatedItem;
-      })
-    );
+      });
+      saveItemsToStorage(updated);
+      return updated;
+    });
 
     if (updatedItem) {
       try {
@@ -155,8 +161,8 @@ export default function App() {
   // Handler: Checklist toggle directly in Firestore Database
   const handleToggleChecklist = async (itemId: string, checkId: string) => {
     let updatedItem: OfficialItem | null = null;
-    setItems((prev) =>
-      prev.map((item) => {
+    setItems((prev) => {
+      const updated = prev.map((item) => {
         if (item.id !== itemId) return item;
         updatedItem = {
           ...item,
@@ -165,8 +171,10 @@ export default function App() {
           ),
         };
         return updatedItem;
-      })
-    );
+      });
+      saveItemsToStorage(updated);
+      return updated;
+    });
 
     if (updatedItem) {
       try {
@@ -199,7 +207,7 @@ export default function App() {
       const batch = writeBatch(db);
       for (const item of sample) {
         const docRef = doc(db, 'tasks', item.id);
-        batch.set(docRef, { ...item, updatedAt: new Date().toISOString() });
+        batch.set(docRef, sanitizeForFirestore({ ...item, updatedAt: new Date().toISOString() }));
       }
       await batch.commit();
       setDbConnected(true);
@@ -216,7 +224,7 @@ export default function App() {
       const batch = writeBatch(db);
       for (const item of importedItems) {
         const docRef = doc(db, 'tasks', item.id);
-        batch.set(docRef, { ...item, updatedAt: new Date().toISOString() });
+        batch.set(docRef, sanitizeForFirestore({ ...item, updatedAt: new Date().toISOString() }));
       }
       await batch.commit();
       setDbConnected(true);

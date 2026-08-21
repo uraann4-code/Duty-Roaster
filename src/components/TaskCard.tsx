@@ -39,6 +39,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showCompleteModal, setShowCompleteModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [completionNoteInput, setCompletionNoteInput] = useState('');
 
   const overdue = isOverdue(item);
@@ -353,11 +354,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
           {/* Delete Button */}
           <button
-            onClick={() => {
-              if (window.confirm(`Are you sure you want to delete "${item.title}"?`)) {
-                onDelete(item.id);
-              }
-            }}
+            onClick={() => setShowDeleteModal(true)}
             title="Delete Item"
             className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer border border-slate-200"
           >
@@ -365,6 +362,40 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border border-slate-200 space-y-4 text-slate-900">
+            <div className="flex items-center space-x-2 text-red-600 font-bold">
+              <Trash2 className="w-5 h-5" />
+              <h4 className="text-base text-slate-900">Delete Official Record</h4>
+            </div>
+            <p className="text-xs text-slate-600">
+              Are you sure you want to permanently delete <span className="font-semibold text-slate-900 font-mono-ref">[{item.referenceNo}]</span> "{item.title}"? This action will remove it from the cloud database.
+            </p>
+            <div className="flex items-center justify-end space-x-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowDeleteModal(false)}
+                className="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  onDelete(item.id);
+                }}
+                className="px-4 py-1.5 text-xs font-bold bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-xs cursor-pointer"
+              >
+                Delete Permanently
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Completion Modal Prompt */}
       {showCompleteModal && (
